@@ -65,7 +65,7 @@ const registerSocketServer = (server) => {
     emitOnlineUsers();
   }, UPDATE_INTERVAL);
 };
-
+   
 module.exports = {
   registerSocketServer,
 };
