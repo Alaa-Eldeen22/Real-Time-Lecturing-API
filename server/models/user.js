@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   mail: { type: String, unique: true },
   username: { type: String },
   password: { type: String },
+  subjects: [{ type: Schema.Types.Object, ref: "Subject" }],
   friends: [{ type: Schema.Types.Object, ref: "User" }],
 });
 

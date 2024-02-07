@@ -16,6 +16,11 @@ const loginSchema = Joi.object({
   mail: Joi.string().email().required(),
 });
 
+const verificationSchema = Joi.object({
+  verificationCode: Joi.string().length(6).required(),
+  mail: Joi.string().email().required(),
+});
+
 router.post(
   "/register",
   validator.body(registerSchema),
@@ -26,10 +31,26 @@ router.post(
   validator.body(loginSchema),
   authControllers.controllers.postLogin
 );
+router.post(
+  "/verify",
+  // validator.body(verificationSchema),
+  authControllers.controllers.postVerification
+);
 
-// test route to verify if our middleware is working
-router.get("/test", auth, (req, res) => {
-  res.send("request passed");
-});
+// // test route to verify if our middleware is working
+// router.post("/verify", (req, res) => {
+//   // console.log(req.body);
+//   const { username, mail, password } = req.body;
+//   res.status(201).json({
+//     userDetails: {
+//       mail: mail,
+//       username: username,
+//       _password: password,
+//       test: "verified",
+//     },
+//   });
+
+//   // return res.status(200).send(req.body);
+// });
 
 module.exports = router;

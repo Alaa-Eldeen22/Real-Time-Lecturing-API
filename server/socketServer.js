@@ -7,10 +7,13 @@ const leaveRoomHandler = require("./socketHandlers/leaveRoomHandler");
 const initializeConnectionHandler = require("./socketHandlers/initializeConnectionHandler");
 const signalingDataHandler = require("./socketHandlers/signalingDataHandler");
 const serverStore = require("./serverStore");
+const postEnroll = require("./controllers/subject/postEnroll");
+const create = require("./controllers/subject/createSubjects");
 
-const UPDATE_INTERVAL = 7 * 1000;
+// const UPDATE_INTERVAL = 7 * 1000;
 
 const registerSocketServer = (server) => {
+  // console.log("register socket server");
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",
@@ -24,17 +27,19 @@ const registerSocketServer = (server) => {
     authSocket(socket, next);
   });
 
-  const emitOnlineUsers = () => {
-    const onlineUsers = serverStore.getOnlineUsers();
-    io.emit("online-users", { onlineUsers });
-  };
+  // const emitOnlineUsers = () => {
+  //   const onlineUsers = serverStore.getOnlineUsers();
+  //   io.emit("online-users", { onlineUsers });
+  // };
 
   io.on("connection", (socket) => {
     console.log("user connected");
+    // create();
+    // postEnroll({ studentEmail: "alaa@gmail.com", subjectCode: "CS351" });
     console.log(socket.id);
 
     newConnectionHandler(socket, io);
-    emitOnlineUsers();
+    // emitOnlineUsers();
 
     socket.on("create-room", () => {
       createRoomHandler(socket);
@@ -61,11 +66,11 @@ const registerSocketServer = (server) => {
     });
   });
 
-  setInterval(() => {
-    emitOnlineUsers();
-  }, UPDATE_INTERVAL);
+  // setInterval(() => {
+  //   emitOnlineUsers();
+  // }, UPDATE_INTERVAL);
 };
-   
+
 module.exports = {
   registerSocketServer,
 };
