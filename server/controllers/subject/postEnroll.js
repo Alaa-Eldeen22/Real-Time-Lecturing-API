@@ -1,18 +1,21 @@
 const Subject = require("../../models/subject");
 const User = require("../../models/user");
 
-const postEnroll = async ({ studentEmail, subjectCode }) => {
-  const subject = await Subject.findOne({ code: subjectCode });
-  const student = await User.findOne({ mail: studentEmail });
-  console.log("email: ", studentEmail);
-  console.log("code: ", subjectCode);
-  console.log("subject: ", subject);
-  console.log("student: ", student);
-  student.subjects = [...student.subjects, subject._id];
-  subject.students = [...subject.students, student._id];
+const postEnroll = async ({ studentId, subjectId }) => {
+  console.log(`studentId: ${studentId}`);
+  const subject = await Subject.findById(subjectId);
+  console.log(subject);
+
+  console.log(`subjectId: ${subjectId}`);
+  const student = await User.findById(studentId);
+  console.log(student);
+
+  student.subjects.push(subject._id);
+  subject.students.push(student._id);
 
   await student.save();
   await subject.save();
+
   console.log("\nsubject: ", subject);
   console.log("student: ", student);
 };

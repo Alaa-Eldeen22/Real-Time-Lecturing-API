@@ -14,15 +14,11 @@ const getSocketServerInstance = () => {
 
 const addNewConnectedUser = ({ socketId, userId }) => {
   connectedUsers.set(socketId, { userId });
-  // console.log("new connected users");
-  // console.log(connectedUsers);
 };
 
 const removeConnectedUser = (socketId) => {
   if (connectedUsers.has(socketId)) {
     connectedUsers.delete(socketId);
-    // console.log("new connected users");
-    // console.log(connectedUsers);
   }
 };
 
@@ -49,11 +45,12 @@ const getOnlineUsers = () => {
 };
 
 // rooms
-const addNewActiveRoom = (userId, socketId) => {
+const addNewActiveRoom = (userId, socketId, subjectId) => {
   const newActiveRoom = {
     roomCreator: {
       userId,
       socketId,
+      subjectId,
     },
     participants: [
       {
@@ -65,9 +62,6 @@ const addNewActiveRoom = (userId, socketId) => {
   };
 
   activeRooms = [...activeRooms, newActiveRoom];
-
-  // console.log("new active rooms: ");
-  // console.log(activeRooms);
 
   return newActiveRoom;
 };
@@ -89,7 +83,31 @@ const getActiveRoom = (roomId) => {
     return null;
   }
 };
+// const findCommonSocketIds = (studentIds, connectedUsers) => {
+//   const commonSocketIds = [];
 
+//   for (const [socketId, userInfo] of connectedUsers) {
+//     const { studentId } = userInfo;
+//     if (studentIds.includes(studentId)) {
+//       commonSocketIds.push(socketId);
+//     }
+//   }
+
+//   return commonSocketIds;
+// };
+
+const getOnlineStudents = (studentIds) => {
+  const onlineStudents = [];
+
+  for (const [socketId, userInfo] of connectedUsers) {
+    const { userId } = userInfo;
+    if (studentIds.includes(userId)) {
+      onlineStudents.push(socketId);
+    }
+  }
+
+  return onlineStudents;
+};
 const joinActiveRoom = (roomId, newParticipant) => {
   const room = activeRooms.find((room) => room.roomId === roomId);
   console.log("room has been found");
@@ -135,4 +153,5 @@ module.exports = {
   getActiveRoom,
   joinActiveRoom,
   leaveActiveRoom,
+  getOnlineStudents,
 };

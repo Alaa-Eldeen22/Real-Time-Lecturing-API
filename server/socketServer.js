@@ -13,7 +13,10 @@ const create = require("./controllers/subject/createSubjects");
 // const UPDATE_INTERVAL = 7 * 1000;
 
 const registerSocketServer = (server) => {
-  // postEnroll({ studentEmail: "abdo@gmail.com", subjectCode: "CS351" });
+  // postEnroll({
+  //   studentId: "65c67c6909b77feebdcffaae",
+  //   subjectId: "65c2d050253cb9939c30c03a",
+  // });
 
   // console.log("register socket server");
   const io = require("socket.io")(server, {
@@ -35,6 +38,7 @@ const registerSocketServer = (server) => {
   // };
 
   io.on("connection", (socket) => {
+    // console.log(socket);
     console.log("user connected");
     // create();
     // console.log(socket.id);
@@ -44,7 +48,7 @@ const registerSocketServer = (server) => {
 
     socket.on("create-room", (data) => {
       console.log("room came", data);
-      createRoomHandler(socket);
+      createRoomHandler(socket, data);
     });
 
     socket.on("join-room", (data) => {

@@ -12,15 +12,15 @@ const newConnectionHandler = async (socket, io) => {
   });
 
   // update pending friends invitations list
-  friendsUpdate.updateFriendsPendingInvitations(userDetails.userId);
+  // friendsUpdate.updateFriendsPendingInvitations(userDetails.userId);
 
   // update friends list
   // console.log("handler");
   // friendsUpdate.updateFriends(socket, userDetails.userId);
   subjectsUpdate.updateSubjects(socket, userDetails.userId);
-  setTimeout(() => {
-    roomsUpdate.updateRooms(socket.id);
-  }, [500]);
+  // setTimeout(() => {
+  //   roomsUpdate.updateRooms(socket.id);
+  // }, [500]);
 };
 
 module.exports = newConnectionHandler;
