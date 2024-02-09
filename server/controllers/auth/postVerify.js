@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
-const postVerification = async (req, res) => {
+const postVerify = async (req, res) => {
   try {
     const { verificationCode, mail } = req.body;
 
@@ -52,4 +52,4 @@ const postVerification = async (req, res) => {
   }
 };
 
-module.exports = postVerification;
+module.exports = postVerify;

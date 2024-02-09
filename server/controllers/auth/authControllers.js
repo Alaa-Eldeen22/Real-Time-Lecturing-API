@@ -1,8 +1,8 @@
 const postLogin = require("./postLogin");
 const postRegister = require("./postRegister");
-const postVerification = require("./postVerification");
+const postVerify = require("./postVerify");
 exports.controllers = {
   postLogin,
   postRegister,
-  postVerification,
+  postVerify,
 };

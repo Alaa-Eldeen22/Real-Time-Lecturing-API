@@ -15,6 +15,7 @@ const newConnectionHandler = async (socket, io) => {
   friendsUpdate.updateFriendsPendingInvitations(userDetails.userId);
 
   // update friends list
+  // console.log("handler");
   // friendsUpdate.updateFriends(socket, userDetails.userId);
   subjectsUpdate.updateSubjects(socket, userDetails.userId);
   setTimeout(() => {

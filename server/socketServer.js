@@ -13,6 +13,8 @@ const create = require("./controllers/subject/createSubjects");
 // const UPDATE_INTERVAL = 7 * 1000;
 
 const registerSocketServer = (server) => {
+  // postEnroll({ studentEmail: "abdo@gmail.com", subjectCode: "CS351" });
+
   // console.log("register socket server");
   const io = require("socket.io")(server, {
     cors: {
@@ -35,13 +37,13 @@ const registerSocketServer = (server) => {
   io.on("connection", (socket) => {
     console.log("user connected");
     // create();
-    // postEnroll({ studentEmail: "alaa@gmail.com", subjectCode: "CS351" });
-    console.log(socket.id);
+    // console.log(socket.id);
 
     newConnectionHandler(socket, io);
     // emitOnlineUsers();
 
-    socket.on("create-room", () => {
+    socket.on("create-room", (data) => {
+      console.log("room came", data);
       createRoomHandler(socket);
     });
 
@@ -62,6 +64,7 @@ const registerSocketServer = (server) => {
     });
 
     socket.on("disconnect", () => {
+      console.log("user disonnected");
       disconnectHandler(socket);
     });
   });

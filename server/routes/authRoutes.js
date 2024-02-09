@@ -34,7 +34,7 @@ router.post(
 router.post(
   "/verify",
   // validator.body(verificationSchema),
-  authControllers.controllers.postVerification
+  authControllers.controllers.postVerify
 );
 
 // // test route to verify if our middleware is working

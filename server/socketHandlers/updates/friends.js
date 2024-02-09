@@ -33,7 +33,6 @@ const updateFriends = async (userId) => {
         "friends",
         "_id username mail"
       );
-
       if (user) {
         const friendsList = user.friends.map((f) => {
           return {
@@ -45,7 +44,7 @@ const updateFriends = async (userId) => {
 
         // get io server instance
         const io = serverStore.getSocketServerInstance();
-
+        console.log("done");
         receiverList.forEach((receiverSocketId) => {
           io.to(receiverSocketId).emit("friends-list", {
             friends: friendsList ? friendsList : [],
