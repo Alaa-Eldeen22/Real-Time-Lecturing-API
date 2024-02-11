@@ -32,11 +32,6 @@ const registerSocketServer = (server) => {
     authSocket(socket, next);
   });
 
-  // const emitOnlineUsers = () => {
-  //   const onlineUsers = serverStore.getOnlineUsers();
-  //   io.emit("online-users", { onlineUsers });
-  // };
-
   io.on("connection", (socket) => {
     // console.log(socket);
     console.log("user connected");
@@ -70,6 +65,11 @@ const registerSocketServer = (server) => {
     socket.on("disconnect", () => {
       console.log("user disonnected");
       disconnectHandler(socket);
+    });
+
+    socket.on("message", (data) => {
+      console.log(data);
+      io.emit("chat-message", data);
     });
   });
 

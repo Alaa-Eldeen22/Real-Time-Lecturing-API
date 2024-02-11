@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const subject = require("./models/subject");
 
 const connectedUsers = new Map();
 let activeRooms = [];
@@ -50,7 +51,6 @@ const addNewActiveRoom = (userId, socketId, subjectId) => {
     roomCreator: {
       userId,
       socketId,
-      subjectId,
     },
     participants: [
       {
@@ -59,6 +59,7 @@ const addNewActiveRoom = (userId, socketId, subjectId) => {
       },
     ],
     roomId: uuidv4(),
+    subjectId,
   };
 
   activeRooms = [...activeRooms, newActiveRoom];
@@ -82,6 +83,20 @@ const getActiveRoom = (roomId) => {
   } else {
     return null;
   }
+};
+
+const getActiveRoomBySubjectId = (subjectsList) => {
+  const acitveRooms = [];
+  activeRooms.forEach((room) => {
+    console.log("roomID: ", room.subjectId);
+    subjectsList.forEach((subj) => {
+      console.log("subj: ", subj);
+      if (room.subjectId === subj) {
+        acitveRooms.push(room);
+      }
+    });
+  });
+  return acitveRooms;
 };
 // const findCommonSocketIds = (studentIds, connectedUsers) => {
 //   const commonSocketIds = [];
@@ -154,4 +169,5 @@ module.exports = {
   joinActiveRoom,
   leaveActiveRoom,
   getOnlineStudents,
+  getActiveRoomBySubjectId,
 };
