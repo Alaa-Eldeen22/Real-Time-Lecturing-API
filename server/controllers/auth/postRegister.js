@@ -75,7 +75,7 @@ function sendVerificationEmail(email) {
     port: 465,
   });
 
-  const verificationCode = "111111" || generateRandomNumberString();
+  const verificationCode = generateRandomNumberString();
 
   const mailOptions = {
     from: process.env.EMAIL,
