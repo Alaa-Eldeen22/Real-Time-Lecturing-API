@@ -9,16 +9,11 @@ const signalingDataHandler = require("./socketHandlers/signalingDataHandler");
 const serverStore = require("./serverStore");
 const postEnroll = require("./controllers/subject/postEnroll");
 const create = require("./controllers/subject/createSubjects");
+const Message = require("./models/message");
 
 // const UPDATE_INTERVAL = 7 * 1000;
 
 const registerSocketServer = (server) => {
-  // postEnroll({
-  //   studentId: "65c67c6909b77feebdcffaae",
-  //   subjectId: "65c2d050253cb9939c30c03a",
-  // });
-
-  // console.log("register socket server");
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",
@@ -62,14 +57,35 @@ const registerSocketServer = (server) => {
       signalingDataHandler(socket, data);
     });
 
-    socket.on("disconnect", () => {
-      console.log("user disonnected");
-      disconnectHandler(socket);
+    socket.on("send-message", async (data) => {
+      try {
+        const newMessage = await Message.create({
+          id: data.id,
+          username: data.username,
+          message: data.message,
+          timestamp: data.timestamp,
+        });
+        io.emit("receive-message", data);
+        console.log("Message stored in ");
+      } catch (error) {
+        console.error("Error saving message to the database:", error);
+      }
     });
 
     socket.on("message", (data) => {
       console.log(data);
       io.emit("chat-message", data);
+    });
+
+    Message.findAll({ order: [["timestamp", "ASC"]] })
+      .then((messages) => {
+        socket.emit("load-messages", messages);
+      })
+      .catch((err) => console.log(err));
+
+    socket.on("disconnect", () => {
+      console.log("user disonnected");
+      disconnectHandler(socket);
     });
   });
 

@@ -7,6 +7,7 @@ require("dotenv").config();
 const socketServer = require("./socketServer");
 const authRoutes = require("./routes/authRoutes");
 const friendInvitationRoutes = require("./routes/friendInvitationRoutes");
+const sequelize = require("./config/database");
 
 const PORT = process.env.PORT || process.env.API_PORT;
 
@@ -32,3 +33,8 @@ mongoose
     console.log("database connection failed");
     console.log(err);
   });
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Database Connected..."))
+  .catch((err) => console.log("Error: ", err));

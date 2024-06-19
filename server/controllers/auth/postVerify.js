@@ -8,6 +8,8 @@ require("dotenv").config();
 const postVerify = async (req, res) => {
   try {
     const { verificationCode, mail } = req.body;
+    console.log(req.body.verificationCode);
+    console.log(verificationCode, mail);
 
     const userExists = await NewUser.findOne({ mail: mail.toLowerCase() });
 
