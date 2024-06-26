@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require("uuid");
 const authSocket = require("./middleware/authSocket");
 const newConnectionHandler = require("./socketHandlers/newConnectionHandler");
 const disconnectHandler = require("./socketHandlers/disconnectHandler");
@@ -10,6 +11,10 @@ const serverStore = require("./serverStore");
 const postEnroll = require("./controllers/subject/postEnroll");
 const create = require("./controllers/subject/createSubjects");
 const Message = require("./models/message");
+const {
+  sendMessage,
+  loadMessages,
+} = require("./controllers/chat/chatController");
 
 // const UPDATE_INTERVAL = 7 * 1000;
 
@@ -57,19 +62,9 @@ const registerSocketServer = (server) => {
       signalingDataHandler(socket, data);
     });
 
-    socket.on("send-message", async (data) => {
-      try {
-        const newMessage = await Message.create({
-          id: data.id,
-          username: data.username,
-          message: data.message,
-          timestamp: data.timestamp,
-        });
-        io.emit("receive-message", data);
-        console.log("Message stored in ");
-      } catch (error) {
-        console.error("Error saving message to the database:", error);
-      }
+    socket.on("send-message", (data) => {
+      console.log(data);
+      sendMessage(socket, io, data);
     });
 
     socket.on("message", (data) => {
@@ -77,11 +72,7 @@ const registerSocketServer = (server) => {
       io.emit("chat-message", data);
     });
 
-    Message.findAll({ order: [["timestamp", "ASC"]] })
-      .then((messages) => {
-        socket.emit("load-messages", messages);
-      })
-      .catch((err) => console.log(err));
+    loadMessages(socket);
 
     socket.on("disconnect", () => {
       console.log("user disonnected");
