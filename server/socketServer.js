@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const authSocket = require("./middleware/authSocket");
 const newConnectionHandler = require("./socketHandlers/newConnectionHandler");
 const disconnectHandler = require("./socketHandlers/disconnectHandler");
@@ -7,18 +6,21 @@ const joinRoomHandler = require("./socketHandlers/joinRoomHandler");
 const leaveRoomHandler = require("./socketHandlers/leaveRoomHandler");
 const initializeConnectionHandler = require("./socketHandlers/initializeConnectionHandler");
 const signalingDataHandler = require("./socketHandlers/signalingDataHandler");
+const newMessageHandler = require("./socketHandlers/newMessageHandler");
 const serverStore = require("./serverStore");
+const loadMessagesHandler = require("./socketHandlers/loadMessagesHandler");
 const postEnroll = require("./controllers/subject/postEnroll");
-const create = require("./controllers/subject/createSubjects");
-const Message = require("./models/message");
-const {
-  sendMessage,
-  loadMessages,
-} = require("./controllers/chat/chatController");
-
+// const create = require("./controllers/subject/createSubjects");
+// const createMessage = require("./controllers/message/createMessage");
 // const UPDATE_INTERVAL = 7 * 1000;
 
 const registerSocketServer = (server) => {
+  // postEnroll({
+  //   studentId: "65c67c6909b77feebdcffaae",
+  //   subjectId: "65c2d050253cb9939c30c03a",
+  // });
+
+  // console.log("register socket server");
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",
@@ -36,13 +38,13 @@ const registerSocketServer = (server) => {
     // console.log(socket);
     console.log("user connected");
     // create();
+    // createMessage();
     // console.log(socket.id);
 
     newConnectionHandler(socket, io);
-    // emitOnlineUsers();
 
     socket.on("create-room", (data) => {
-      console.log("room came", data);
+      // console.log("room came", data);
       createRoomHandler(socket, data);
     });
 
@@ -63,26 +65,21 @@ const registerSocketServer = (server) => {
     });
 
     socket.on("send-message", (data) => {
-      console.log(data);
-      sendMessage(socket, io, data);
+      // console.log("message came :\n", data);
+      newMessageHandler(data, socket.id);
     });
 
-    socket.on("message", (data) => {
+    socket.on("load-messages", (data) => {
+      console.log("load message");
       console.log(data);
-      io.emit("chat-message", data);
+      loadMessagesHandler(socket, data);
     });
-
-    loadMessages(socket);
 
     socket.on("disconnect", () => {
       console.log("user disonnected");
       disconnectHandler(socket);
     });
   });
-
-  // setInterval(() => {
-  //   emitOnlineUsers();
-  // }, UPDATE_INTERVAL);
 };
 
 module.exports = {

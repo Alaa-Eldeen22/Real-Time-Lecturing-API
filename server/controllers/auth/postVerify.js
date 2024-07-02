@@ -8,8 +8,6 @@ require("dotenv").config();
 const postVerify = async (req, res) => {
   try {
     const { verificationCode, mail } = req.body;
-    console.log(req.body.verificationCode);
-    console.log(verificationCode, mail);
 
     const userExists = await NewUser.findOne({ mail: mail.toLowerCase() });
 
@@ -17,7 +15,7 @@ const postVerify = async (req, res) => {
       return res.status(409).send("Email must register before verification");
     }
     if (verificationCode === userExists.verificationCode) {
-      console.log("Identical");
+      // console.log("Identical");
 
       // Create verified user and save it in User document
       const user = await User.create({
@@ -36,7 +34,6 @@ const postVerify = async (req, res) => {
         process.env.TOKEN_KEY,
         { expiresIn: "24h" }
       );
-      console.log("no errors");
       res.status(201).json({
         userDetails: {
           mail: user.mail,
@@ -46,7 +43,7 @@ const postVerify = async (req, res) => {
         },
       });
     } else {
-      console.log("Verification Codes aren't identical");
+      // console.log("Verification Codes aren't identical");
       return res.status(409).send("Your verification code is wrong");
     }
   } catch (err) {

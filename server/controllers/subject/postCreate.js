@@ -6,7 +6,7 @@ const postCreate = async ({ code, name }) => {
       code: code,
       name: name,
     });
-    console.log("subject created", sub);
+    // console.log("subject created", sub);
   } catch (err) {
     console.log(err);
   }

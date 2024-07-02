@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require("uuid");
-const subject = require("./models/subject");
 
 const connectedUsers = new Map();
 let activeRooms = [];
@@ -88,9 +87,9 @@ const getActiveRoom = (roomId) => {
 const getActiveRoomBySubjectId = (subjectsList) => {
   const acitveRooms = [];
   activeRooms.forEach((room) => {
-    console.log("roomID: ", room.subjectId);
+    // console.log("roomID: ", room.subjectId);
     subjectsList.forEach((subj) => {
-      console.log("subj: ", subj);
+      // console.log("subj: ", subj);
       if (room.subjectId === subj) {
         acitveRooms.push(room);
       }
@@ -125,10 +124,10 @@ const getOnlineStudents = (studentIds) => {
 };
 const joinActiveRoom = (roomId, newParticipant) => {
   const room = activeRooms.find((room) => room.roomId === roomId);
-  console.log("room has been found");
+  // console.log("room has been found");
 
   activeRooms = activeRooms.filter((room) => room.roomId !== roomId);
-  console.log(activeRooms);
+  // console.log(activeRooms);
 
   const updatedRoom = {
     ...room,

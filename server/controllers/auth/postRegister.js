@@ -8,7 +8,6 @@ const crypto = require("crypto");
 const postRegister = async (req, res) => {
   try {
     const userDetails = req.body;
-    console.log("user register request came");
 
     // Search in the exist-verificated users.
     const userExists = await User.exists({
@@ -37,7 +36,7 @@ const postRegister = async (req, res) => {
 const updateUserOrCreateNew = async (userDetails) => {
   const { username, mail, password } = userDetails;
   const verificationCode = sendVerificationEmail(mail);
-  console.log(verificationCode);
+  // console.log(verificationCode);
   const encryptedPassword = await bcrypt.hash(password, 10);
 
   // Check if user exists based on email
@@ -93,7 +92,7 @@ function sendVerificationEmail(email) {
     if (error) {
       console.error("Error sending email:", error);
     } else {
-      console.log("Email sent successfully");
+      // console.log("Email sent successfully");
     }
   });
 

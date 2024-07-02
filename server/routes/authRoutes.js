@@ -33,24 +33,8 @@ router.post(
 );
 router.post(
   "/verify",
-  // validator.body(verificationSchema),
+  validator.body(verificationSchema),
   authControllers.controllers.postVerify
 );
-
-// // test route to verify if our middleware is working
-// router.post("/verify", (req, res) => {
-//   // console.log(req.body);
-//   const { username, mail, password } = req.body;
-//   res.status(201).json({
-//     userDetails: {
-//       mail: mail,
-//       username: username,
-//       _password: password,
-//       test: "verified",
-//     },
-//   });
-
-//   // return res.status(200).send(req.body);
-// });
 
 module.exports = router;

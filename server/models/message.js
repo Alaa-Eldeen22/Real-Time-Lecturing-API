@@ -1,33 +1,32 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
+const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const Message = sequelize.define(
-  "Message",
-  {
-    id: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      defaultValue: () => uuidv4(),
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    timestamp: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+const messageSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    default: uuidv4,
+    unique: true,
+    required: true,
   },
-  {
-    tableName: "messages",
-    timestamps: false,
-  }
-);
-sequelize.sync();
+  username: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
+  subjectId: {
+    type: String,
+    required: true,
+  },
+});
+
+const Message = mongoose.model("Message", messageSchema);
+
 module.exports = Message;
